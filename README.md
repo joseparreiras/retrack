@@ -55,7 +55,7 @@ The modules that are not pre-installed will be installed automatically.
 
 ## 🎈 Usage <a name="usage"></a>
 
-Before running the program you need to specify the journals that you want to track. This can be done by editing either the [journals.json](/journals.json) file, which by default contains the top 500 journals or by changing the variable *idx* in the [get_articles.py](/get_articles.py) file. The *idx* variable specifies the index of the journals that will be scraped. The journals are ordered by their Repec rank. You should remember that python indexes start at 0.
+Before running the program you need to specify the journals that you want to track. This can be done by editing either the [journals.json](/data/journals.json) file, which by default contains the top 500 journals or by changing the variable *idx* in the [get_articles.py](/get_articles.py) file. The *idx* variable specifies the index of the journals that will be scraped. The journals are ordered by their Repec rank. You should remember that python indexes start at 0.
 
 The program [top_journals.py](/top_journals.py) can be used to get the top *n* journals. This can be done by running the following command:
 
@@ -63,7 +63,7 @@ The program [top_journals.py](/top_journals.py) can be used to get the top *n* j
 python top_journals.py
 ```
 
-It will automatically get the top 500 journals and store them in the [journals.json](/journals.json) file. The number of journals to be scraped can be changed by editing the variable *max_ranking* in the [top_journals.py](/top_journals.py) file.
+It will automatically get the top 500 journals and store them in the [journals.json](/data/journals.json) file on the [data](/data) folder. The number of journals to be scraped can be changed by editing the variable *max_ranking* in the [top_journals.py](/top_journals.py) file.
 
 ## 🚀 Deployment <a name = "deployment"></a>
 
@@ -73,7 +73,7 @@ To run the program simply type
 python get_articles.py
 ```
 
-and the code will produce the [articles.json](/articles.json) file. This file contains the metadata for the most recent releases of the selected journals.
+and the code will produce the [data/articles.json](/data/articles.json) file. This file contains the metadata for the most recent releases of the selected journals.
 
 The number of most recent versions to be scraped can also be changing by editing the variable *number* in the [get_articles.py](/get_articles.py) file. The default value is 1. Setting this variable to 0 will scrape all the versions of the journal.
 
@@ -84,7 +84,7 @@ To replicate it, first you need to create an automation to run this program ever
 
 ```bash
 python /path_to_repo/retrack/get_articles.py
-shortcuts run "ReTrack" -i /path_to_repo/retrack/articles.json
+shortcuts run "ReTrack" -i /path_to_repo/retrack/data/articles.json
 ```
 
 Save this into your Automator iCloud folder. Then, open the Calendar app and create a new event and schedule it to repeat as you like. Finally, click *Alert > Custom*, select *Open File*, *Other* and find the Automator file you just created. This will run the program every time the event is triggered.
