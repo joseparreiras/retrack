@@ -1,0 +1,33 @@
+import requests
+import pandas as pd
+from lxml import etree
+
+# Ideas URLs
+starting_url = 'https://ideas.repec.org'
+url = 'https://ideas.repec.org/top/top.journals.hindex.html'
+max_ranking = 500  # Maximum number of journals to get
+
+# Get h-index ranking of journals
+page = requests.get(url)  # Request page
+dom = etree.HTML(page.text)  # Parse HTML source
+
+# Get data
+table = dom.xpath('//table')[1]  # Ranking table
+rows = table.xpath('tr')[1:]  # Rows of the table
+
+table = pd.DataFrame()  # Initialize empty table
+for i, r in enumerate(rows):
+    if i < max_ranking:
+        journal = r.xpath('td/a')[-1]  # Journals
+        publisher = journal.text.split(', ')[-1]  # Publisher
+        name = journal.text[:-len(publisher)-2]
+        new = pd.DataFrame({i: {
+            'ranking': i+1,  # Ranking
+            'journal': name,  # Name
+            'publisher': publisher,  # Publisher
+            'url': journal.attrib['href']  # URL
+        }}).T
+        table = pd.concat([table, new])  # Add new row to table
+
+table = table[['ranking', 'journal', 'publisher', 'url']]  # Reorder columns
+table.to_json('journals.json')  # Save table

@@ -1,0 +1,4 @@
+.history/
+__pycache__/
+.ipynb_checkpoints/
+run.sh
