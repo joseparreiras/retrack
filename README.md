@@ -12,7 +12,7 @@
 
 ---
 
-<p align="center"> This is an automation designed to track the publications of top economic journals using Ideas Repec database.
+<p align="center"> This is an automation designed to track the publications of top economic journals using IDEAS RePEc database.
     <br> 
 </p>
 
