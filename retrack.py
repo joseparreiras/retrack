@@ -45,13 +45,13 @@ def parse_article(url):
     }
 
 
-def parse_journal(url, number=1):
+def parse_journal(url, num=1):
     """
     Parse journal from IDEAS RePEc.
 
     Args:
         url (str): Journal URL
-        number (int): Number of volumes to get
+        num (int): Number of volumes to get
 
     Yields:
         dict: Dictionary with the following keys:
@@ -80,7 +80,7 @@ def parse_journal(url, number=1):
     issue = [x.split(', ')[2].split('Issue ')[1] for x in release]
     volumes = dom.xpath('//h2[text()="Content"]/following-sibling::div')[:-1]
 
-    for j, v in enumerate(volumes[:number]):
+    for j, v in enumerate(volumes[0:num]):
         d = date[j]
         n = number[j]
         i = issue[j]
