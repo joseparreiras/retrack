@@ -1,5 +1,7 @@
 import requests
 from lxml import etree
+from bs4 import BeautifulSoup
+from datetime import datetime as dt
 
 
 def parse_article(url):
@@ -12,31 +14,40 @@ def parse_article(url):
     Yields:
         dict: Dictionary with the following keys:
         - title: Title of the article
+        - journal: Journal of the article
+        - date: Date of the article
         - author: Author of the article
         - abstract: Abstract of the article
         - jel: JEL codes of the article
         - doi: DOI of the article
         - link: Link to download the article
     """
-    # Get page
     page = requests.get(url)  # Request page
-    dom = etree.HTML(page.text)  # Parse HTML source
+    soup = BeautifulSoup(page.text, 'html.parser')  # Parse HTML source
 
-    # Get data
-    title = dom.xpath('//div[@id="title"]/h1/text()').pop()  # Get title
-    title = title.lstrip('[“').rstrip('\,”]')  # Clean title
-    author = dom.xpath('//*[@class="authorname"]/text()')  # Get author
-    abstract = dom.xpath(
-        '//*[@id="abstract-body"]/text()').pop()  # Get abstract
-    jel = dom.xpath('//a[contains(@href,"/j/")]/@href')  # Get JEL codes
-    # Clean JEL codes (remove /j/ and .html)
-    jel = [j[3:].split('.html')[0] for j in jel if len(j) > 3]
-    doi = dom.xpath(
-        '//div[@id="biblio-body"]/text()')[-1].split('DOI: ')[-1]  # Get DOI
-    link = dom.xpath('//*[@id="download"]/form/input/@value')[1]
+    # Get metadata
+    title = soup.find(
+        'meta', attrs={'name': 'citation_title'}).attrs['content']
+    author = soup.find(
+        'meta', attrs={'name': 'citation_authors'}).attrs['content'].split(';')
+    author = [x.strip() for x in author]
+    abstract = soup.find(
+        'meta', attrs={'name': 'citation_abstract'}).attrs['content']
+    date = soup.find('meta', attrs={'name': 'date'}).attrs['content']
+    journal = soup.find('meta', attrs={'name': 'citation_journal_title'}).attrs
+    ['content']
+    jel = soup.find('meta', attrs={'name': 'jel_code'}
+                    ).attrs['content'].split(';')
+    try:  # DOI is not always available
+        doi = soup.find('meta', attrs={'name': 'DOI'}).attrs['content']
+    except AttributeError:
+        doi = ""
+    link = soup.find('input', attrs={'name': 'url'}).attrs['value']
 
     yield {
         'title': title,
+        'journal': journal,
+        'date': date,
         'author': author,
         'abstract': abstract,
         'jel': jel,
@@ -45,13 +56,14 @@ def parse_article(url):
     }
 
 
-def parse_journal(url, num=1):
+def parse_journal(url, n_months=1, n_volumes=1):
     """
     Parse journal from IDEAS RePEc.
 
     Args:
         url (str): Journal URL
-        num (int): Number of volumes to get
+        n_months (int): Number of months to get
+        n_volumes (int): Number of volumes to get
 
     Yields:
         dict: Dictionary with the following keys:
@@ -78,10 +90,25 @@ def parse_journal(url, num=1):
     date = [x.strip().split(', ')[0] for x in release]
     number = [int(x.split(', ')[1].split('Volume ')[1]) for x in release]
     issue = [x.split(', ')[2].split('Issue ')[1] for x in release]
-    volumes = dom.xpath('//h2[text()="Content"]/following-sibling::div')[:-1]
+    # Get latest volumes
+    volumes = dom.xpath(
+        '//h2[text()="Content"]/following-sibling::div')[:n_volumes]
 
-    for j, v in enumerate(volumes[0:num]):
+    start_date = dt.today().replace(day=1, month=dt.today().month-n_months)
+    for j, v in enumerate(volumes):
         d = date[j]
         n = number[j]
         i = issue[j]
-        yield {'date': d, 'volume': n, 'issue': i, 'articles': list(parse_volume(v))}
+        a = []
+        p_list = v.xpath('ul/li/b/a/@href')
+        for p in p_list:
+            paper_url = starting_url + p
+            new = list(parse_article(paper_url))
+            new = [x for x in new if dt.strptime(
+                x['date'], '%Y-%m-%d') >= start_date]
+            if len(new) > 0:
+                a += new
+            else:
+                break
+        if len(a) > 0:
+            yield {'date': d, 'volume': n, 'issue': i, 'articles': a}
