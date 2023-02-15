@@ -75,7 +75,7 @@ python get_articles.py
 
 and the code will produce the [data/articles.json](/data/articles.json) file. This file contains the metadata for the most recent releases of the selected journals.
 
-The number of most recent versions to be scraped can also be changing by editing the variable *number* in the [get_articles.py](/get_articles.py) file. The default value is 1. Setting this variable to 0 will scrape all the versions of the journal.
+The number of most recent versions to be scraped can also be changing by editing the variable n_months* in the [get_articles.py](/get_articles.py) file. The default value is 1, which collects all the papers published in the previous month.
 
 ## 🤖 Automation <a name = "automation"></a>
 
