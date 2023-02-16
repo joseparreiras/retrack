@@ -141,8 +141,9 @@ I used this program to automatically get the latest versions of my desired top j
 To replicate it, first you need to create an automation to run this program every month. To do this, open the Automator app and create a new service. Then, add a Run Shell Script action and paste the following code:
 
 ```bash
-python /path_to_repo/retrack/get_articles.py other_arguments
-shortcuts run "ReTrack" -i /path_to_repo/retrack/data/articles.json
+cd /path_to_repo/retrack
+python get_articles.py other_arguments
+shortcuts run "ReTrack" -i data/articles.json
 ```
 
 Save this into your Automator iCloud folder. Then, open the Calendar app and create a new event and schedule it to repeat as you like. Finally, click *Alert > Custom*, select *Open File*, *Other* and find the Automator file you just created. This will run the program every time the event is triggered.
@@ -150,8 +151,15 @@ Save this into your Automator iCloud folder. Then, open the Calendar app and cre
 If you don't use Things, there is a version of this shortcut that exports that into a *Markdown* file. It can be found [here](https://www.icloud.com/shortcuts/0d680d0eabaf489e8c77c2e124e433f8). The markdown version can also be created from the [markdown_export.py](/markdown_export.py) file. To do this, change the Automator file to:
 
 ```bash
-python /path_to_repo/retrack/get_articles.py other_arguments
-python /path_to_repo/retrack/markdown_export.py /path_to_repo/retrack/data/articles.json
+cd /path_to_repo/retrack
+python get_articles.py other_arguments
+python markdown_export.py -i data/articles.json -o out/output_file_name.md
+```
+
+For more information on how to use the markdown export, run:
+
+```bash
+python markdown_export.py -h
 ```
 
 ## ⛏️ Built Using <a name = "built_using"></a>
