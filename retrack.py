@@ -86,29 +86,36 @@ def parse_journal(url, n_months=1, n_volumes=1):
             yield from parse_article(paper_url)
 
     # Get data
-    release = dom.xpath('//div[@id="content"]/h3/text()')
-    date = [x.strip().split(', ')[0] for x in release]
-    number = [int(x.split(', ')[1].split('Volume ')[1]) for x in release]
-    issue = [x.split(', ')[2].split('Issue ')[1] for x in release]
+    release = dom.xpath('//div[@id="content"]/h3/text()')  # Get release dates
+    date = [x.strip().split(', ')[0] for x in release]  # Get dates
+    number = [int(x.split(', ')[1].split('Volume ')[1])
+              for x in release]  # Get volume numbers
+    issue = [x.split(', ')[2].split('Issue ')[1]
+             for x in release]  # Get issue numbers
     # Get latest volumes
     volumes = dom.xpath(
         '//h2[text()="Content"]/following-sibling::div')[:n_volumes]
 
-    start_date = dt.today().replace(day=1, month=dt.today().month-n_months)
+    # Collect articles from the last n_months
+    if n_months > 0:
+        start_date = dt.today().replace(day=1, month=dt.today().month-n_months)
+    else:
+        start_date = dt(1900, 1, 1)  # Collect all articles if n_months <= 0
     for j, v in enumerate(volumes):
-        d = date[j]
-        n = number[j]
-        i = issue[j]
-        a = []
-        p_list = v.xpath('ul/li/b/a/@href')
+        d = date[j]  # Get date
+        n = number[j]  # Get volume number
+        i = issue[j]  # Get issue number
+        a = []  # Initialize empty list of articles
+        p_list = v.xpath('ul/li/b/a/@href')  # Get list of papers
         for p in p_list:
-            paper_url = starting_url + p
-            new = list(parse_article(paper_url))
+            paper_url = starting_url + p  # Get paper URL
+            new = list(parse_article(paper_url))  # Parse paper
+            # Filter by date
             new = [x for x in new if dt.strptime(
                 x['date'], '%Y-%m-%d') >= start_date]
-            if len(new) > 0:
+            if len(new) > 0:  # Add articles to list
                 a += new
             else:
-                break
+                break  # Stop if no articles are found
         if len(a) > 0:
             yield {'date': d, 'volume': n, 'issue': i, 'articles': a}

@@ -30,4 +30,4 @@ for i, r in enumerate(rows):
         table = pd.concat([table, new])  # Add new row to table
 
 table = table[['ranking', 'journal', 'publisher', 'url']]  # Reorder columns
-table.to_json('journals.json')  # Save table
+table.to_excel('data/journals.xlsx', index=False)  # Save table

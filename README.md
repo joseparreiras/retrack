@@ -23,6 +23,7 @@
 - [🏁 Getting Started ](#-getting-started-)
   - [Prerequisites](#prerequisites)
 - [🎈 Usage ](#-usage-)
+  - [Selecting Journals](#selecting-journals)
 - [🚀 Deployment ](#-deployment-)
 - [🤖 Automation ](#-automation-)
 - [⛏️ Built Using ](#️-built-using-)
@@ -30,7 +31,7 @@
 
 ## 🧐 About <a name = "about"></a>
 
-This program scrapes the RePEc website for the top journals and downloads the metadata for their most recent releases. It then stores this data into a *.json* file that can be used for other automations. The program is designed to be run on a monthly basis to ensure that the data is up to date.
+This program uses the BeautifulSoup and Requests modules to scrape the RePEc website for the top journals and downloads the metadata for their most recent releases. It then stores this data into a *.json* file that can be used for other automations. The program is designed to be run on a monthly basis to ensure that the data is up to date. Up to the current date, Ideas update its database on the 2nd day of every month.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -55,7 +56,8 @@ The modules that are not pre-installed will be installed automatically.
 
 ## 🎈 Usage <a name="usage"></a>
 
-Before running the program you need to specify the journals that you want to track. This can be done by editing either the [journals.json](/data/journals.json) file, which by default contains the top 500 journals or by changing the variable *idx* in the [get_articles.py](/get_articles.py) file. The *idx* variable specifies the index of the journals that will be scraped. The journals are ordered by their Repec rank. You should remember that python indexes start at 0.
+### Selecting Journals
+Before running the program you need to specify the journals that you want to track. This can be done by editing either the [my_journals.xlsx](/data/my_journals.xlsx) spreadsheet. The current selection is the one that works best for me, so be free to change it according to your needs. To select the journals you want, go to the [top_journals.xlsx](data/top_journals.xlsx) and delete the lines corresponding to the undesired journals. Then rename it as *my_journals.xlsx* and overwrite the current file. The journals are ordered by their Repec rank.
 
 The program [top_journals.py](/top_journals.py) can be used to get the top *n* journals. This can be done by running the following command:
 
@@ -75,7 +77,7 @@ python get_articles.py
 
 and the code will produce the [data/articles.json](/data/articles.json) file. This file contains the metadata for the most recent releases of the selected journals.
 
-The number of most recent versions to be scraped can also be changing by editing the variable n_months* in the [get_articles.py](/get_articles.py) file. The default value is 1, which collects all the papers published in the previous month.
+The number of most recent versions to be scraped can also be changed by editing the variable *n_months* in the [get_articles.py](/get_articles.py) file. The default value is 1, which collects all the papers published in the previous month. Setting it to -1 will collect all available articles. The variable *n_version* collects the *n* most recent versions of each journal. The default value is 1, which collects the most recent version of each paper. Setting it to -1 collects all available versions.
 
 ## 🤖 Automation <a name = "automation"></a>
 
@@ -98,6 +100,7 @@ python /path_to_repo/retrack/markdown_export.py
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
+- [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) - Web Scraping
 - [IDEAS RePEc](https://ideas.repec.org) - Database
 - [Apple Shortcuts](https://support.apple.com/en-us/HT208309) - Automation
 - [Apple Automator](https://support.apple.com/en-us/HT201236) - Automation
