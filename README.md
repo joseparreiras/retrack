@@ -24,8 +24,6 @@
   - [Prerequisites](#prerequisites)
 - [🎈 Usage ](#-usage-)
   - [✅ Selecting Journals](#-selecting-journals)
-    - [1. Selecting a range of journals by their RePEc rank:](#1-selecting-a-range-of-journals-by-their-repec-rank)
-    - [2. Selecting a list of journals by their Repec rank:](#2-selecting-a-list-of-journals-by-their-repec-rank)
   - [❓ Other Arguments](#-other-arguments)
 - [🤖 Automation ](#-automation-)
 - [⛏️ Built Using ](#️-built-using-)
@@ -95,7 +93,7 @@ python get_articles.py data/journals.xlsx
 ### ✅ Selecting Journals
 
 Selection of journals is made by passing the *rankings* argument to the command above. There are three options for selecting journals:
-#### 1. Selecting a range of journals by their RePEc rank:
+1. Selecting a range of journals by their RePEc rank:
 
 Passing 2 arguments along with the option `--range` or `-r` will select the journals from the first to the second argument. For example, running the following command:
 ```bash
@@ -106,7 +104,7 @@ Passing 1 argument along with the option `--range` or `-r` will select the journ
 python get_articles.py end_rank -r
 ```
 
-#### 2. Selecting a list of journals by their Repec rank:
+2. Selecting a list of journals by their Repec rank:
 
 Passing a list of arguments along with the option `--list` or `-l` will select the journals with the specified ranks. This list must be separated by spaces and the *list* keyword (which necessarily comes at last) is used to indicate that the ranks are to be interpreted as a list. For example, running the following command:
 ```bash
