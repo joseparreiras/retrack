@@ -1,11 +1,12 @@
 import requests
 import pandas as pd
 from lxml import etree
+import sys
 
 # Ideas URLs
 starting_url = 'https://ideas.repec.org'
 url = 'https://ideas.repec.org/top/top.journals.hindex.html'
-max_ranking = 500  # Maximum number of journals to get
+max_ranking = int(sys.argv[1])  # Maximum number of journals to get
 
 # Get h-index ranking of journals
 page = requests.get(url)  # Request page

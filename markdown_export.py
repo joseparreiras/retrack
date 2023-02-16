@@ -1,6 +1,7 @@
 import json
+import sys
 
-with open('articles.json') as f:
+with open(sys.argv[1]) as f:
     articles = json.load(f)
 
 
