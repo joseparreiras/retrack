@@ -34,7 +34,7 @@ for j, x in articles.items():
     volume = x[0].get('volume')
     issue = x[0].get('issue')
     head += """
-- [%s](#%s)\n""" % (j, j.lower().replace(' ', '-'))
+- [%s](#%s)""" % (j, j.lower().replace(' ', '-'))
     body += """
 \n
 ---

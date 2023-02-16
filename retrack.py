@@ -35,7 +35,10 @@ def parse_article(url):
     date = soup.find('meta', attrs={'name': 'date'}).attrs['content']
     jel = soup.find('meta', attrs={'name': 'jel_code'}
                     ).attrs['content'].split(';')
-    jel = [x.strip() for x in jel]  # Remove whitespaces
+    if len(jel) == 1: # Format if only one JEL code
+        jel = jel[0].strip()
+    else:
+        jel = [x.strip() for x in jel]  # Remove whitespaces
     try:  # DOI is not always available
         doi = soup.find('meta', attrs={'name': 'DOI'}).attrs['content']
     except AttributeError:
