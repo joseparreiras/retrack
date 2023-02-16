@@ -70,14 +70,14 @@ Which will generate the following output:
 usage: get_articles.py [-h] [--input INPUT] [--list] [--range] [--output OUTPUT] [--n_months N_MONTHS] [--n_volumes N_VOLUMES] rankings [rankings ...]
 
 positional arguments:
-  rankings              rankings to subset
+  rankings              journal rankings
 
 optional arguments:
   -h, --help            show this help message and exit
   --input INPUT, -i INPUT
                         path to excel input file
-  --list, -l            list journals
-  --range, -r           range of journals
+  --list, -l            get a list of journals
+  --range, -r           get a range of journals
   --output OUTPUT, -o OUTPUT
                         path to output file
   --n_months N_MONTHS, -m N_MONTHS

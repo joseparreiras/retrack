@@ -10,13 +10,13 @@ starting_url = "https://ideas.repec.org"  # Ideas URL
 # Parse arguments from command line
 parser = argparse.ArgumentParser()
 parser.add_argument('integer', metavar='rankings', type=int,
-                    nargs='+', help='rankings to subset')
+                    nargs='+', help='journal rankings')
 parser.add_argument('--input', '-i', help='path to excel input file',
                     type=str, default='data/journals.xlsx')
 parser.add_argument('--list', '-l', action='store_true',
-                    help='list journals', default=True)
+                    help='get a list of journals', default=True)
 parser.add_argument('--range', '-r', action='store_true',
-                    help='range of journals')
+                    help='get a range of journals')
 parser.add_argument('--output', '-o', help='path to output file',
                     type=str, default='data/articles.json')
 parser.add_argument('--n_months', '-m',
