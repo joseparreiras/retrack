@@ -14,8 +14,7 @@ def parse_article(url):
     Yields:
         dict: Dictionary with the following keys:
         - title: Title of the article
-        - journal: Journal of the article
-        - date: Date of the article
+        - date_updated: Date the article was updated
         - author: Author of the article
         - abstract: Abstract of the article
         - jel: JEL codes of the article
@@ -34,10 +33,9 @@ def parse_article(url):
     abstract = soup.find(
         'meta', attrs={'name': 'citation_abstract'}).attrs['content']
     date = soup.find('meta', attrs={'name': 'date'}).attrs['content']
-    journal = soup.find('meta', attrs={'name': 'citation_journal_title'}).attrs
-    ['content']
     jel = soup.find('meta', attrs={'name': 'jel_code'}
                     ).attrs['content'].split(';')
+    jel = [x.strip() for x in jel]  # Remove whitespaces
     try:  # DOI is not always available
         doi = soup.find('meta', attrs={'name': 'DOI'}).attrs['content']
     except AttributeError:
@@ -46,8 +44,7 @@ def parse_article(url):
 
     yield {
         'title': title,
-        'journal': journal,
-        'date': date,
+        'date_updated': date,
         'author': author,
         'abstract': abstract,
         'jel': jel,
@@ -98,7 +95,7 @@ def parse_journal(url, n_months=1, n_volumes=1):
 
     # Collect articles from the last n_months
     if n_months > 0:
-        start_date = dt.today().replace(day=1, month=dt.today().month-n_months)
+        start_date = dt.today().replace(month=dt.today().month-n_months)
     else:
         start_date = dt(1900, 1, 1)  # Collect all articles if n_months <= 0
     for j, v in enumerate(volumes):
@@ -112,7 +109,7 @@ def parse_journal(url, n_months=1, n_volumes=1):
             new = list(parse_article(paper_url))  # Parse paper
             # Filter by date
             new = [x for x in new if dt.strptime(
-                x['date'], '%Y-%m-%d') >= start_date]
+                x['date_updated'], '%Y-%m-%d') >= start_date]
             if len(new) > 0:  # Add articles to list
                 a += new
             else:
