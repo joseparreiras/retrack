@@ -1,6 +1,6 @@
 .history/
 __pycache__/
 .ipynb_checkpoints/
-run.sh
 .DS_Store
-data/my_journals.xlsx
+run.sh
+out/
