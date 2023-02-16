@@ -13,7 +13,6 @@
 ---
 
 <p align="center"> This is an automation designed to track the publications of top economic journals using IDEAS RePEc database.
-    <br> 
 </p>
 
 ## 📝 Table of Contents
@@ -21,7 +20,7 @@
 - [📝 Table of Contents](#-table-of-contents)
 - [🧐 About ](#-about-)
 - [🏁 Getting Started ](#-getting-started-)
-  - [Prerequisites](#prerequisites)
+  - [🚜 Prerequisites](#-prerequisites)
 - [🎈 Usage ](#-usage-)
   - [✅ Selecting Journals](#-selecting-journals)
   - [❓ Other Arguments](#-other-arguments)
@@ -31,18 +30,18 @@
 
 ## 🧐 About <a name = "about"></a>
 
-This program uses the BeautifulSoup and Requests modules to scrape the RePEc website for the top journals and downloads the metadata for their most recent releases. It then stores this data into a *.json* file that can be used for other automations. The program is designed to be run on a monthly basis to ensure that the data is up to date. Up to the current date, Ideas update its database on the 2nd day of every month.
+This program uses the BeautifulSoup and Requests modules to scrape the RePEc website for the top journals and downloads the metadata for their most recent releases. It then stores this data into a _.json_ file that can be used for other automations. The program is designed to be run on a monthly basis to ensure that the data is up to date. Up to the current date, Ideas update its database on the 2nd day of every month.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
-### Prerequisites
+### 🚜 Prerequisites
 
 Start by cloning this repository to your local machine:
 
 ```bash
-git clone https://github.com/joseparreiras/retrack 
+git clone https://github.com/joseparreiras/retrack
 cd retrack
 ```
 
@@ -82,7 +81,7 @@ optional arguments:
                         number of months to get
   --n_volumes N_VOLUMES, -v N_VOLUMES
                         number of volumes to get
-````
+```
 
 The file [journals.xlsx](data/journals.xlsx) on the [data](/data) folder contains the list of the top 500 journals according to the RePEc ranking. This ranking is used to select the journals that will be downloaded. When the program is run, it will automatically get the top 500 journals and store them in the [articles.json](/data/articles.json) file on the [data](/data) folder. The program can be run using the following command on the terminal:
 
@@ -92,30 +91,37 @@ python get_articles.py data/journals.xlsx
 
 ### ✅ Selecting Journals
 
-Selection of journals is made by passing the *rankings* argument to the command above. There are three options for selecting journals:
+The selection of journals is made by passing the _rankings_ argument to the command above. There are three options for selecting journals:
+
 1. Selecting a range of journals by their RePEc rank:
 
 Passing 2 arguments along with the option `--range` or `-r` will select the journals from the first to the second argument. For example, running the following command:
+
 ```bash
 python get_articles.py start_rank end_rank -r
 ```
+
 Passing 1 argument along with the option `--range` or `-r` will select the journals from the first to the `end_rank`. For example, running the following command:
+
 ```bash
 python get_articles.py end_rank -r
 ```
 
 2. Selecting a list of journals by their Repec rank:
 
-Passing a list of arguments along with the option `--list` or `-l` will select the journals with the specified ranks. This list must be separated by spaces and the *list* keyword (which necessarily comes at last) is used to indicate that the ranks are to be interpreted as a list. For example, running the following command:
+Passing a list of arguments along with the option `--list` or `-l` will select the journals with the specified ranks. This list must be separated by spaces and the _list_ keyword (which necessarily comes at last) is used to indicate that the ranks are to be interpreted as a list. For example, running the following command:
+
 ```bash
 python get_articles.py  rank1 rank2 rank3 ... -l
 ```
+
 The `-list` option cannot be used together with the `-range` option and is taken as the default option if no option is specified. Therefore the above command is equivalent to running:
+
 ```bash
 python get_articles.py rank1 rank2 rank3 ...
 ```
 
-### ❓ Other Arguments  
+### ❓ Other Arguments
 
 The program also takes the following optional arguments:
 
@@ -130,14 +136,15 @@ That can be used in any combination. For example, to get the articles from the l
 python get_articles.py -o data/foo.json -m 12 -v 6
 ```
 
-The default input file is [journals.xlsx](data/journals.xlsx) which contains the top 500 journals according to the RePEc ranking. This file is obtained by running the [top_journals.py](/top_journals.py) program. This program can be used to get the top *N* journals. This can be done by running the following command:
+The default input file is [journals.xlsx](data/journals.xlsx) which contains the top 500 journals according to the RePEc ranking. This file is obtained by running the [top_journals.py](/top_journals.py) program. This program can be used to get the top _N_ journals. This can be done by running the following command:
 
 ```bash
 python top_journals.py N
 ```
+
 ## 🤖 Automation <a name = "automation"></a>
 
-I used this program to automatically get the latest versions of my desired top journals and add them to my task manager [Things](https://culturedcode.com/things/). This is done using Things` new Apple Shortcuts feature which I used to create [this shortcut](https://www.icloud.com/shortcuts/6a873d1662244c7d9fa959bfaf3bddd0). This tutorial is replicable in macOS only. 
+I used this program to automatically get the latest versions of my desired top journals and add them to my task manager [Things](https://culturedcode.com/things/). This is done using Things` new Apple Shortcuts feature which I used to create [this shortcut](https://www.icloud.com/shortcuts/6a873d1662244c7d9fa959bfaf3bddd0). This tutorial is replicable in macOS only.
 To replicate it, first you need to create an automation to run this program every month. To do this, open the Automator app and create a new service. Then, add a Run Shell Script action and paste the following code:
 
 ```bash
@@ -146,9 +153,9 @@ python get_articles.py other_arguments
 shortcuts run "ReTrack" -i data/articles.json
 ```
 
-Save this into your Automator iCloud folder. Then, open the Calendar app and create a new event and schedule it to repeat as you like. Finally, click *Alert > Custom*, select *Open File*, *Other* and find the Automator file you just created. This will run the program every time the event is triggered.
+Save this into your Automator iCloud folder. Then, open the Calendar app and create a new event and schedule it to repeat as you like. Finally, click _Alert > Custom_, select _Open File_, _Other_ and find the Automator file you just created. This will run the program every time the event is triggered.
 
-If you don't use Things, there is a version of this shortcut that exports that into a *Markdown* file. It can be found [here](https://www.icloud.com/shortcuts/0d680d0eabaf489e8c77c2e124e433f8). The markdown version can also be created from the [markdown_export.py](/markdown_export.py) file. To do this, change the Automator file to:
+If you don't use Things, there is a version of this shortcut that exports that into a _Markdown_ file. It can be found [here](https://www.icloud.com/shortcuts/0d680d0eabaf489e8c77c2e124e433f8). The markdown version can also be created from the [markdown_export.py](/markdown_export.py) file. To do this, change the Automator file to:
 
 ```bash
 cd /path_to_repo/retrack
