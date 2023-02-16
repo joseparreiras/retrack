@@ -7,7 +7,7 @@ starting_url = "https://ideas.repec.org"  # Ideas URL
 n_months = 1  # Number of journal versions to get
 n_volumes = 3  # Number of journal versions to get
 
-journals = read_excel('data/journals.xlsx')  # Load table of journals
+journals = read_excel('data/my_journals.xlsx')  # Load table of journals
 
 table = {}  # Initialize empty table
 for i in tqdm(range(len(journals))):
